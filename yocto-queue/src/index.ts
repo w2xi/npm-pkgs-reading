@@ -1,20 +1,20 @@
-class LinkedListNode {
-	value: any;
-	next: LinkedListNode | undefined;
-	constructor(value: any) {
+class Node<T> {
+	value: T;
+	next: Node<T> | null = null;
+	constructor(value: T) {
 		this.value = value;
 	}
 }
 
-export class Queue {
-	#head: LinkedListNode | undefined;
-	#tail: LinkedListNode | undefined;
+export class Queue<T> {
+	#head: Node<T> | null = null;
+	#tail: Node<T> | null = null;
 	#size: number = 0;
 	constructor() {
 		this.clear();
 	}
-	enqueue(value: any) {
-		const node = new LinkedListNode(value);
+	enqueue(value: T) {
+		const node = new Node<T>(value);
 		if (this.#head) {
 			this.#tail!.next = node;
 			this.#tail = node;
@@ -34,8 +34,8 @@ export class Queue {
 		return current.value;
 	}
 	clear() {
-		this.#head = undefined;
-		this.#tail = undefined;
+		this.#head = null;
+		this.#tail = null;
 		this.#size = 0;
 	}
 	get size() {

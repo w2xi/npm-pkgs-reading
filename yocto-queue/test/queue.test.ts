@@ -2,7 +2,7 @@ import { Queue } from '../src';
 import { expect, describe, test } from 'vitest';
 
 describe('Queue', () => {
-  const queue = new Queue();
+  const queue = new Queue<string>();
 
   test('should create a new queue', () => {
     expect(queue).toBeInstanceOf(Queue);

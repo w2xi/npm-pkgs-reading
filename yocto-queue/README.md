@@ -41,7 +41,7 @@ head.next.next = new Node(3);
 - `.clear()`: 清空队列
 - `.size`: 队列的大小
 
-### 源码
+### 源码实现
 
 下面就是 `yocto-queue` 的所有代码，只有 50 行左右，整体来看代码非常简洁，也没什么好解读的，加些注释即可。
 
@@ -108,3 +108,115 @@ class Queue {
 	}
 }
 ```
+
+### 使用 typeScript 重写一下
+
+```ts
+class Node<T> {
+	value: T;
+	next: Node<T> | null = null;
+	constructor(value: T) {
+		this.value = value;
+	}
+}
+
+export class Queue<T> {
+	#head: Node<T> | null = null;
+	#tail: Node<T> | null = null;
+	#size: number = 0;
+	constructor() {
+		this.clear();
+	}
+	enqueue(value: T) {
+		const node = new Node<T>(value);
+		if (this.#head) {
+			this.#tail!.next = node;
+			this.#tail = node;
+		} else {
+			this.#head = node;
+			this.#tail = node;
+		}
+		this.#size++;
+	}
+	dequeue() {
+		const current = this.#head;
+		if (!current) {
+			return;
+		}
+		this.#head = current.next;
+		this.#size--;
+		return current.value;
+	}
+	clear() {
+		this.#head = null;
+		this.#tail = null;
+		this.#size = 0;
+	}
+	get size() {
+		return this.#size;
+	}
+	* [Symbol.iterator]() {
+		let current = this.#head;
+		while (current) {
+			yield current.value;
+			current = current.next;
+		}
+	}
+}
+```
+
+### vitest 单元测试
+
+这里可以直接借用 `ChatGPT` 帮我们生成对应的单元测试代码，然后在修改一下对应的数据即可，奈斯。
+
+🐮🐴 打工人的一天啊。
+
+```ts
+describe('Queue', () => {
+  const queue = new Queue<string>();
+
+  test('should create a new queue', () => {
+    expect(queue).toBeInstanceOf(Queue);
+  });
+
+  test('should enqueue a value', () => {
+    queue.enqueue('🐮🐴');
+    queue.enqueue('🐮🐴');
+    expect(queue.size).toBe(2);
+  });
+
+  test('should dequeue a value', () => {
+    queue.clear();
+    queue.enqueue('🐮🐴');
+    queue.enqueue('🐮🐴');
+    queue.enqueue('🐮🐴');
+    expect(queue.dequeue()).toBe('🐮🐴');
+    expect(queue.size).toBe(2);
+  });
+
+  test('should clear the queue', () => {
+    queue.enqueue('🐮🐴');
+    queue.enqueue('🐮🐴');
+    queue.enqueue('🐮🐴');
+    queue.clear();
+    expect(queue.size).toBe(0);
+  });
+
+  test('should iterate over the values in the queue', () => {
+    queue.enqueue('🐮🐴');
+    queue.enqueue('🐮🐴');
+    queue.enqueue('🐮🐴');
+    const values = [...queue];
+    expect(values).toEqual(['🐮🐴', '🐮🐴', '🐮🐴']);
+  });
+});
+```
+
+## 总结
+
+总的来说，`yocto-queue` 代码实现是非常简单的，代码量很少，但是我们也可以从这个npm包中学到不少东西。同时可以延伸一下，比如使用 typescript 重写改实现，然后使用 vitest 进行单元测试。
+
+## 参考
+
+- [yocto-queue](https://www.npmjs.com/package/yocto-queue)
+- [vitest](https://vitest.dev/)
