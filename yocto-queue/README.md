@@ -1,7 +1,7 @@
 # yocto-queue —— 一个 tiny 使用链表实现的队列库
 
 
-## 简单的介绍下链表
+## 链表
 
 链表是一种常见的基础数据结构，是一种线性表，但是并不会按线性的顺序存储数据，而是在每一个节点里存到下一个节点的指针(Pointer)。
 
@@ -24,13 +24,30 @@ head.next.next = new Node(3);
 
 ![linked-list](./assets/linked-list.png)
 
+## 队列
+
+队列是一种先进先出的数据结构，队列在尾部添加新元素，并从顶部移除元素。
+
+![queue](./assets/queue.png)
+
+队列在 JavaScript 中也可以用数组来表示:
+
+```js
+const queue = [];
+queue.push(1);
+queue.push(2);
+queue.shift(); // 1
+```
+
+但是，数组并不适合用来表示队列，因为数组的 `shift` 操作的时间复杂度为 O(n)。
+
 ## yocto-queue 库
 
 [yocto-queue](https://github.com/sindresorhus/yocto-queue) 的介绍如下:
 
 > You should use this package instead of an array if you do a lot of Array#push() and Array#shift() on large arrays, since Array#shift() has linear time complexity O(n) while Queue#dequeue() has constant time complexity O(1). That makes a huge difference for large arrays.
 
-可以看到，不论是 `入对` 还是 `出队`，`yocto-queue` 的复杂度都是 `O(1)`，性能是非常好的。
+可以看到，不论是 `入队` 还是 `出队`，`yocto-queue` 的复杂度都是 `O(1)`，性能是非常好的。
 
 ### API
 
@@ -95,8 +112,8 @@ class Queue {
 	get size() {
 		return this.#size;
 	}
-	// 实现了迭代器属性，意味着实例对象是可迭代的
-	// example: 
+	// 实现了迭代器属性，意味着实例对象是可迭代的，同时也是一个生成器
+	// usage: 
 	// case 1: `...` spreading symbol
 	// case 2: `for ... of`
 	* [Symbol.iterator]() {
@@ -109,7 +126,7 @@ class Queue {
 }
 ```
 
-### 使用 typeScript 重写一下
+## 使用 typeScript 重写一下
 
 ```ts
 class Node<T> {
@@ -165,7 +182,7 @@ export class Queue<T> {
 }
 ```
 
-### vitest 单元测试
+## vitest 单元测试
 
 这里可以直接借用 `ChatGPT` 帮我们生成对应的单元测试代码，然后在修改一下对应的数据即可，奈斯。
 
