@@ -1,4 +1,4 @@
-# yocto-queue —— 一个 tiny 使用链表实现的队列库
+# yocto-queue —— 一个 tiny 链表实现的队列库
 
 
 ## 链表
