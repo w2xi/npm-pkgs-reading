@@ -1,5 +1,4 @@
-# yocto-queue —— 一个 tiny 链表实现的队列库
-
+# 【源码阅读】yocto-queue —— 一个微型的链表实现的队列库
 
 ## 链表
 
@@ -231,9 +230,11 @@ describe('Queue', () => {
 
 ## 总结
 
-总的来说，`yocto-queue` 代码实现是非常简单的，代码量很少，但是我们也可以从这个npm包中学到不少东西。同时可以延伸一下，比如使用 typescript 重写改实现，然后使用 vitest 进行单元测试。
+总的来说，`yocto-queue` 代码实现是非常简单的，代码量很少，但是我们也可以从这个npm包中学到不少东西。同时可以延伸一下，比如使用 typescript 重写该实现，然后使用 vitest 进行单元测试。
 
 ## 参考
 
 - [yocto-queue](https://www.npmjs.com/package/yocto-queue)
+- [rollup](https://rollupjs.org/)
 - [vitest](https://vitest.dev/)
+
