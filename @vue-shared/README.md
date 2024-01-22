@@ -157,7 +157,7 @@ export const isGloballyWhitelisted = isGloballyAllowed
 
 #### 例子2: 区分组件和html原生标签
 
-下面代码中的 `isHTMLTag` 函数会在模板解析时用来判断解析到的标签是否是一个 html 标签，如果不是，则很可能是一个用户自定义的**组件**。
+下面代码中的 `isHTMLTag()` 函数会在模板解析时用来判断解析到的标签是否是一个 html 标签，如果不是，则很可能是一个用户自定义的**组件**。
 
 ```ts
 // packages/shared/src/domTagConfig.ts
@@ -577,6 +577,10 @@ const bool = true
 expect(looseEqual(String(bool), bool)).toBe(true)
 ```
 
+> 查看vue3源码，发现 `looseEqual()` 在 `v-model` 指令的实现中有用到，位置: `packages/runtime-core/src/directives/vModel.ts`
+
+`looseEqual()` 的实现如下:
+
 ```ts
 // packages/shared/src/looseEqual.ts 
 
@@ -643,7 +647,7 @@ export function looseEqual(a: any, b: any): boolean {
   return String(a) === String(b)
 }
 
-// Array.prototype.indexOf()
+// 类似 Array.prototype.indexOf()
 // 不过这里是松散比较
 export function looseIndexOf(arr: any[], val: any): number {
   return arr.findIndex(item => looseEqual(item, val))
