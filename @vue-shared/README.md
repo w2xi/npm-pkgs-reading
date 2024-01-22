@@ -157,7 +157,7 @@ export const isGloballyWhitelisted = isGloballyAllowed
 
 #### 例子2: 区分组件和html原生标签
 
-下面代码中的 `isHTMLTag` 函数会在模板解析用来标记是否是一个自定义组件。
+下面代码中的 `isHTMLTag` 函数会在模板解析时用来判断解析到的标签是否是一个 html 标签，如果不是，则很可能是一个用户自定义的**组件**。
 
 ```ts
 // packages/shared/src/domTagConfig.ts
@@ -567,10 +567,22 @@ export function escapeHtmlComment(src: string): string {
 
 > 关于 `looseEqual()` 的用法可以查看单元测试，位置在: `packages/shared/__tests__/looseEqual.spec.ts`。
 
+从测试用例中取出几个例子，发现对于 `1` 和 `'1'`，`true` 和 `'true'`，`looseEqual` 认为它们相等。
+
+```js
+const number = 1
+expect(looseEqual(String(number), number)).toBe(true)
+
+const bool = true
+expect(looseEqual(String(bool), bool)).toBe(true)
+```
+
 ```ts
 // packages/shared/src/looseEqual.ts 
 
+// 松散比较两个数组是否相等
 function looseCompareArrays(a: any[], b: any[]) {
+  // 如果长度不等
   if (a.length !== b.length) return false
   let equal = true
   for (let i = 0; equal && i < a.length; i++) {
@@ -579,25 +591,31 @@ function looseCompareArrays(a: any[], b: any[]) {
   return equal
 }
 
+// 松散比较两个值是否相等
 export function looseEqual(a: any, b: any): boolean {
+  // 如果两个值或引用相等
   if (a === b) return true
   let aValidType = isDate(a)
   let bValidType = isDate(b)
+  // 验证日期类型，精确到毫秒
   if (aValidType || bValidType) {
     return aValidType && bValidType ? a.getTime() === b.getTime() : false
   }
   aValidType = isSymbol(a)
   bValidType = isSymbol(b)
+  // 验证 symbol 类型
   if (aValidType || bValidType) {
     return a === b
   }
   aValidType = isArray(a)
   bValidType = isArray(b)
+  // 验证数组类型
   if (aValidType || bValidType) {
     return aValidType && bValidType ? looseCompareArrays(a, b) : false
   }
   aValidType = isObject(a)
   bValidType = isObject(b)
+  // 验证对象类型
   if (aValidType || bValidType) {
     /* istanbul ignore if: this if will probably never be called */
     if (!aValidType || !bValidType) {
@@ -605,6 +623,7 @@ export function looseEqual(a: any, b: any): boolean {
     }
     const aKeysCount = Object.keys(a).length
     const bKeysCount = Object.keys(b).length
+    // 比较键的数量
     if (aKeysCount !== bKeysCount) {
       return false
     }
@@ -614,15 +633,18 @@ export function looseEqual(a: any, b: any): boolean {
       if (
         (aHasKey && !bHasKey) ||
         (!aHasKey && bHasKey) ||
-        !looseEqual(a[key], b[key])
+        !looseEqual(a[key], b[key]) // 递归
       ) {
         return false
       }
     }
   }
+  // 最后强制类型转换为字符串，再做比较
   return String(a) === String(b)
 }
 
+// Array.prototype.indexOf()
+// 不过这里是松散比较
 export function looseIndexOf(arr: any[], val: any): number {
   return arr.findIndex(item => looseEqual(item, val))
 }
