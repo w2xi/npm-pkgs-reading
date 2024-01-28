@@ -2,7 +2,7 @@
 
 ## 前言
 
-[@vue/shared](https://github.com/vuejs/core/tree/main/packages/shared#readme) 是 Vue3 内部工具函数库，其源码位于 [Vue3 仓库](https://github.com/vuejs/core) 的 `packages/shared` 目录下，同时作为 Vue3 的一个单独的 NPM 包发布，其版本号与 Vue3 保持一致。
+[@vue/shared](https://www.npmjs.com/package/@vue/shared) 是 Vue3 内部工具函数库，其源码位于 [Vue3 仓库](https://github.com/vuejs/core) 的 `packages/shared` 目录下，同时作为 Vue3 的一个单独的 NPM 包发布，其版本号与 Vue3 保持一致。
 
 > 注意：本文基于 `@vue/shared` 版本 `v3.3.4` 进行分析的。
 
