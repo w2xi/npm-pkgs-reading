@@ -28,6 +28,12 @@
 
 ## 准备工作
 
+用到的依赖:
+
+- `fs`: Node.js 内置模块，提供了文件操作相关的功能
+- `commander`: Node.js 命令行界面的完整解决方案
+- `release-it`: 用于管理 npm 包的版本和发布等工作
+
 ## 实现
 
 ## 调试
@@ -65,10 +71,7 @@ D:\software\nvm\nodejs -> .\
 ```bash
 treei $ (main) treei -i '.git|node_modules' --icon
 D:\www\github\wheels\treei
-├──📄.editorconfig
-├──📄.eslintrc.js
 ├──📄.gitignore
-├──📄.prettierrc.js
 ├──📄.release-it.json
 ├──📄CHANGELOG.md
 ├──📄package-lock.json
@@ -87,7 +90,9 @@ D:\www\github\wheels\treei
 
 ## 发布
 
-这没啥好说的，没账号就加添加一个账号，有账号就登录然后发布即可。
+### 手动管理
+
+如果没账号就加添加一个账号，有账号就登录然后发布即可。
 
 ```bash
 # 登录
@@ -100,4 +105,89 @@ npm publish
 
 https://www.npmjs.com/package/treei
 
+但是，如果后续有更新的话，每次都得手动更改**版本号**，然后再次执行 `npm login` 和 `npm publish`。
+
+显然，这样重复的操作太繁琐了，而且还容易出错。
+
+因此手动管理包的版本发布是不推荐的。
+
+### 自动管理
+
+[release-it](https://github.com/release-it/release-it)
+
+一句话介绍 `release-it`: 一个自动管理包版本和包发布相关任务的命令行工具。
+
+安装:
+
+```bash
+npm install release-it -D
+```
+
+配置 `package.json`:
+
+```json
+{
+  "scripts": {
+    "release": "release-it"
+  }
+}
+```
+
+由于这里我使用了自动生成 `changelog` 的功能，因此还需要安装一个 `release-it` 的插件:
+
+```bash
+npm install @release-it/conventional-changelog -D
+```
+
+在根目录创建 `release-it.json` 文件，内容如下:
+
+```json
+{
+  "github": {
+    "release": true,
+    "web": true,
+    "autoGenerate": true
+  },
+  "git": {
+    "commitMessage": "release: v${version}"
+  },
+  "npm": {
+    "publish": true
+  },
+  "hooks": {
+    "after:bump": "echo 更新版本成功"
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular",
+      "infile": "CHANGELOG.md"
+    }
+  }
+}
+```
+
+执行命令:
+
+```bash
+npm run release
+```
+
+过程大概如下图所示:
+
+![release](./images/release.png)
+
+执行成功后就可以在 `npm` 找到这个包了。
+
+https://www.npmjs.com/package/treei
+
 ## 总结
+
+这里我们手摸手完成了一个包的开发，测试，发布等工作。
+
+似乎一切都是那么的简单，就像呼吸一样，开个玩笑，哈哈。
+
+来看下，整个过程我们学到了什么:
+
+- 如何写一个Node命令行工具
+- npm 包的本地调试
+- `release-it` 包版本控制
