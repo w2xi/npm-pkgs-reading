@@ -1,5 +1,7 @@
 # NPM 包源码阅读
 
-[yocto-queue](./yocto-queue/README.md)
+- [yocto-queue](./yocto-queue/README.md)
+- [@vue/shared](./@vue-shared/README.md)
+- [treei](./treei/README.md)
 
-[@vue/shared](./@vue-shared/README.md)
+
